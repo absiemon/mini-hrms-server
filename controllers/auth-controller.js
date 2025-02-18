@@ -54,20 +54,25 @@ class AuthController {
         const { accessToken, refreshToken } = tokenService.generateToken(payload);
         console.log('Access Token', accessToken);
         console.log('Refresh Token', refreshToken);
+        console.log('process.env.MODE', process.env.MODE);
 
         await tokenService.storeRefreshToken(_id, refreshToken);
         res.cookie('accessToken', accessToken, {
             maxAge: 1000 * 60 * 60 * 24 * 30,
             httpOnly: true,
+            sameSite: process.env.MODE === 'PRODUCTION' ? 'None' : 'Lax',
+            secure: process.env.MODE === 'PRODUCTION' ? true : false,
         });
         res.cookie('refreshToken', refreshToken, {
             maxAge: 1000 * 60 * 60 * 24 * 30,
             httpOnly: true,
+            sameSite: process.env.MODE === 'PRODUCTION' ? 'None' : 'Lax',
+            secure: process.env.MODE === 'PRODUCTION' ? true : false,
         });
 
         res.json({
             success: true,
-            message: 'Login Successfull',
+            message: 'Login Successful',
             user: new UserDto(user),
         });
     };
@@ -128,10 +133,14 @@ class AuthController {
         res.cookie('accessToken', accessToken, {
             maxAge: 1000 * 60 * 60 * 24 * 30,
             httpOnly: true,
+            sameSite: process.env.MODE === 'PRODUCTION' ? 'None' : 'Lax',
+            secure: process.env.MODE === 'PRODUCTION' ? true : false,
         });
         res.cookie('refreshToken', refreshToken, {
             maxAge: 1000 * 60 * 60 * 24 * 30,
             httpOnly: true,
+            sameSite: process.env.MODE === 'PRODUCTION' ? 'None' : 'Lax',
+            secure: process.env.MODE === 'PRODUCTION' ? true : false,
         });
 
         res.json({

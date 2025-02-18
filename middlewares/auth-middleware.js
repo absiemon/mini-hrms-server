@@ -19,7 +19,7 @@ const auth = async (req, res, next) => {
             throw new Error(ErrorHandler.unAuthorized());
         }
         req.user = userData;
-    } 
+    }
     catch (e) {
         if (e instanceof TokenExpiredError) {
             if (!refreshTokenFromCookie) {
@@ -53,10 +53,14 @@ const auth = async (req, res, next) => {
             res.cookie('accessToken', accessToken, {
                 maxAge: 1000 * 60 * 60 * 24 * 30,
                 // httpOnly: true
+                sameSite: process.env.MODE === 'PRODUCTION' ? 'None' : 'Lax',
+                secure: process.env.MODE === 'PRODUCTION' ? true : false,
             });
             res.cookie('refreshToken', refreshToken, {
                 maxAge: 1000 * 60 * 60 * 24 * 30,
                 // httpOnly: true
+                sameSite: process.env.MODE === 'PRODUCTION' ? 'None' : 'Lax',
+                secure: process.env.MODE === 'PRODUCTION' ? true : false,
             });
             console.log('Token Generated Success');
             return next();
