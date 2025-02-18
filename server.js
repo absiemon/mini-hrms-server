@@ -34,16 +34,17 @@ app.use(express.json());
 app.use(cookieParser());
 
 // Routes
-app.use('/', (req, res, next) => {
-    res.json({ message: "Server running" })
-});
+
 
 app.use('/api/auth', authRoute);
 app.use('/api/admin', auth, authRole(['admin']), adminRoute);
 app.use('/api/employee', auth, authRole(['employee']), employeeRoute);
 
-
 app.use('/storage', express.static('storage'))
+
+app.use('/', (req, res, next) => {
+    res.json({ message: "Server running" })
+});
 
 //Middlewares;
 app.use((req, res, next) => {
