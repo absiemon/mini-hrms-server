@@ -26,7 +26,8 @@ console.log(typeof CLIENT_URL)
 //Cors Option
 const corsOption = {
     credentials: true,
-    origin: [CLIENT_URL]
+    origin: [CLIENT_URL],
+      allowedHeaders: 'Content-Type, Authorization, Cookie, refresh-token'
 }
 
 //Configuration

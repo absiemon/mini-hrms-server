@@ -74,6 +74,8 @@ class AuthController {
             success: true,
             message: 'Login Successful',
             user: new UserDto(user),
+            accessToken: accessToken,
+            refreshToken: refreshToken,
         });
     };
 
@@ -95,14 +97,20 @@ class AuthController {
     };
 
     refresh = async (req, res, next) => {
-        const { refreshToken: refreshTokenFromCookie } = req.cookies;
+        // const { refreshToken: refreshTokenFromCookie } = req.cookies;
+        const refreshTokenFromCookie = req.headers['refresh-token']
+
         if (!refreshTokenFromCookie) {
             return next(ErrorHandler.unAuthorized());
         }
 
         const userData = await tokenService.verifyRefreshToken(refreshTokenFromCookie);
+
         const { _id, email, username, type } = userData;
+        console.log("userData: " + _id, email, username, type)
+
         const token = await tokenService.findRefreshToken(_id, refreshTokenFromCookie);
+
         if (!token) {
             res.clearCookie('refreshToken');
             res.clearCookie('accessToken');
@@ -147,6 +155,8 @@ class AuthController {
             success: true,
             message: 'Secure access has been granted',
             user: new UserDto(user),
+            accessToken: accessToken,
+            refreshToken: refreshToken,
         });
     };
 }

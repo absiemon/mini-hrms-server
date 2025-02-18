@@ -4,10 +4,13 @@ const ErrorHandler = require('../utils/error-handler');
 const { TokenExpiredError } = require('jsonwebtoken');
 
 const auth = async (req, res, next) => {
-    const {
-        accessToken: accessTokenFromCookie,
-        refreshToken: refreshTokenFromCookie,
-    } = req.cookies;
+    // const {
+    //     accessToken: accessTokenFromCookie,
+    //     refreshToken: refreshTokenFromCookie,
+    // } = req.cookies;
+
+    const accessTokenFromCookie = req.headers.authorization?.split(' ')[1];
+    const refreshTokenFromCookie = req.headers['refresh-token']
 
     try {
         if (!accessTokenFromCookie) {
