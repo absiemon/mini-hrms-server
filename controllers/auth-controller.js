@@ -60,14 +60,14 @@ class AuthController {
         res.cookie('accessToken', accessToken, {
             maxAge: 1000 * 60 * 60 * 24 * 30,
             httpOnly: true,
-            sameSite: process.env.MODE === 'PRODUCTION' ? 'None' : 'Lax',
-            secure: process.env.MODE === 'PRODUCTION' ? true : false,
+            sameSite: 'None',
+            secure: true,
         });
         res.cookie('refreshToken', refreshToken, {
             maxAge: 1000 * 60 * 60 * 24 * 30,
             httpOnly: true,
-            sameSite: process.env.MODE === 'PRODUCTION' ? 'None' : 'Lax',
-            secure: process.env.MODE === 'PRODUCTION' ? true : false,
+            sameSite: 'None',
+            secure: true ,
         });
 
         res.json({
