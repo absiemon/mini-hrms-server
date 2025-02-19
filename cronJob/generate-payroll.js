@@ -21,7 +21,7 @@ const getTotalWorkingDays = (month, year) => {
 const generatePayroll = async () => {
     try {
 
-        const now = new Date();
+        const now = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" }))
         let month = now.getMonth(); // returns 0 for January, so previous month is current month index
         let year = now.getFullYear();
         // If current month is January, previous month is December of last year

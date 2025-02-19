@@ -182,7 +182,7 @@ class UserController {
                 "Friday",
                 "Saturday",
             ];
-            const currentTime = new Date();
+            const currentTime = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" }))
 
             // Working hours (for example: 9 AM to 7 PM)
             const WORK_START_HOUR = 9; // 9:00 AM
@@ -190,7 +190,7 @@ class UserController {
             const currentHour = currentTime.getHours();
 
             if (currentHour < WORK_START_HOUR || currentHour >= WORK_END_HOUR) {
-                return next(ErrorHandler.notAllowed("Attendance is only allowed during working hours 9AM to 6 PM."));
+                return next(ErrorHandler.notAllowed("Attendance is only allowed during working hours 9AM to 6 PM IST."));
             }
 
             const query = {
@@ -245,7 +245,7 @@ class UserController {
     checkAttendanceStatus = async (req, res, next) => {
         try {
             const employeeID = req.user._id
-            const currentTime = new Date();
+            const currentTime = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" }))
             const query = {
                 employeeID,
                 year: currentTime.getFullYear(),
