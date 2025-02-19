@@ -11,7 +11,7 @@ class UserController {
         let { name, email, password, type, address, mobile, aadharNo, panNo, bankAccountNo, ifscCode } = req.body;
         const username = 'user' + crypto.randomInt(11111111, 999999999);
 
-        if (!name || !email || !username || !password || !type || !address || !file || !mobile || !aadharNo || !panNo || !bankAccountNo || !ifscCode) {
+        if (!name || !email || !username || !password || !type || !address  || !mobile || !aadharNo || !panNo || !bankAccountNo || !ifscCode) {
             return next(ErrorHandler.badRequest('All Fields Required'));
         }
         type = type.toLowerCase();
@@ -35,7 +35,7 @@ class UserController {
             password,
             type,
             address,
-            image: file.filename,
+            image: file?.filename,
             aadharNo,
             panNo,
             bankAccountNo,
@@ -50,8 +50,8 @@ class UserController {
     };
 
     updateUser = async (req, res, next) => {
-        const file = req.file;
-        const filename = file && file.filename;
+        const file = req?.file;
+        const filename = file && file?.filename;
         let user, id;
         if (req.user.type === 'admin') {
             const { id: paramId } = req.params;
