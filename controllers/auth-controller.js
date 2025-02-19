@@ -52,9 +52,6 @@ class AuthController {
             type,
         };
         const { accessToken, refreshToken } = tokenService.generateToken(payload);
-        console.log('Access Token', accessToken);
-        console.log('Refresh Token', refreshToken);
-        console.log('process.env.MODE', process.env.MODE);
 
         await tokenService.storeRefreshToken(_id, refreshToken);
         res.cookie('accessToken', accessToken, {
@@ -67,15 +64,13 @@ class AuthController {
             maxAge: 1000 * 60 * 60 * 24 * 30,
             httpOnly: true,
             sameSite: 'None',
-            secure: true ,
+            secure: true,
         });
 
         res.json({
             success: true,
             message: 'Login Successful',
             user: new UserDto(user),
-            accessToken: accessToken,
-            refreshToken: refreshToken,
         });
     };
 
@@ -97,8 +92,7 @@ class AuthController {
     };
 
     refresh = async (req, res, next) => {
-        // const { refreshToken: refreshTokenFromCookie } = req.cookies;
-        const refreshTokenFromCookie = req.headers['refresh-token']
+        const { refreshToken: refreshTokenFromCookie } = req.cookies;
 
         if (!refreshTokenFromCookie) {
             return next(ErrorHandler.unAuthorized());
@@ -107,7 +101,6 @@ class AuthController {
         const userData = await tokenService.verifyRefreshToken(refreshTokenFromCookie);
 
         const { _id, email, username, type } = userData;
-        console.log("userData: " + _id, email, username, type)
 
         const token = await tokenService.findRefreshToken(_id, refreshTokenFromCookie);
 
@@ -141,22 +134,20 @@ class AuthController {
         res.cookie('accessToken', accessToken, {
             maxAge: 1000 * 60 * 60 * 24 * 30,
             httpOnly: true,
-            sameSite: process.env.MODE === 'PRODUCTION' ? 'None' : 'Lax',
-            secure: process.env.MODE === 'PRODUCTION' ? true : false,
+            sameSite: 'None',
+            secure: true,
         });
         res.cookie('refreshToken', refreshToken, {
             maxAge: 1000 * 60 * 60 * 24 * 30,
             httpOnly: true,
-            sameSite: process.env.MODE === 'PRODUCTION' ? 'None' : 'Lax',
-            secure: process.env.MODE === 'PRODUCTION' ? true : false,
+            sameSite: 'None',
+            secure: true,
         });
 
         res.json({
             success: true,
             message: 'Secure access has been granted',
             user: new UserDto(user),
-            accessToken: accessToken,
-            refreshToken: refreshToken,
         });
     };
 }

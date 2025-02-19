@@ -4,13 +4,10 @@ const ErrorHandler = require('../utils/error-handler');
 const { TokenExpiredError } = require('jsonwebtoken');
 
 const auth = async (req, res, next) => {
-    // const {
-    //     accessToken: accessTokenFromCookie,
-    //     refreshToken: refreshTokenFromCookie,
-    // } = req.cookies;
-
-    const accessTokenFromCookie = req.headers.authorization?.split(' ')[1];
-    const refreshTokenFromCookie = req.headers['refresh-token']
+    const {
+        accessToken: accessTokenFromCookie,
+        refreshToken: refreshTokenFromCookie,
+    } = req.cookies;
 
     try {
         if (!accessTokenFromCookie) {
@@ -56,14 +53,14 @@ const auth = async (req, res, next) => {
             res.cookie('accessToken', accessToken, {
                 maxAge: 1000 * 60 * 60 * 24 * 30,
                 // httpOnly: true
-                sameSite: process.env.MODE === 'PRODUCTION' ? 'None' : 'Lax',
-                secure: process.env.MODE === 'PRODUCTION' ? true : false,
+                sameSite: 'None',
+                secure: true,
             });
             res.cookie('refreshToken', refreshToken, {
                 maxAge: 1000 * 60 * 60 * 24 * 30,
                 // httpOnly: true
-                sameSite: process.env.MODE === 'PRODUCTION' ? 'None' : 'Lax',
-                secure: process.env.MODE === 'PRODUCTION' ? true : false,
+                sameSite: 'None',
+                secure: true,
             });
             console.log('Token Generated Success');
             return next();
